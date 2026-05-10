@@ -62,7 +62,7 @@ export const useSessionUser = create<AuthState & AuthAction>()(
                     },
                 })),
         }),
-        { name: 'sessionUser', storage: createJSONStorage(() => localStorage) },
+        { name: 'sessionUser', storage: createJSONStorage(() => getPersistStorage()) },
     ),
 )
 

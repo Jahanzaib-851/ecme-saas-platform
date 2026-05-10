@@ -4,6 +4,8 @@ import appConfig from '@/configs/app.config'
 import { useSessionUser, useToken } from '@/store/authStore'
 import { apiSignIn, apiSignOut, apiSignUp } from '@/services/AuthService'
 import SocketService from '@/services/SocketService'
+import { signOut as firebaseSignOut } from 'firebase/auth'
+import FirebaseAuth from '@/services/firebase/FirebaseAuth'
 import { REDIRECT_URL_KEY } from '@/constants/app.constant'
 import { useNavigate } from 'react-router'
 import type {
@@ -94,6 +96,9 @@ function AuthProvider({ children }: AuthProviderProps) {
         setTokenState('')
         setUser({})
         setSessionSignedIn(false)
+        // Clear all storage so a tab reopen starts fresh
+        sessionStorage.clear()
+        localStorage.removeItem('sessionUser')
     }
 
     const signIn = async (values: SignInCredential): AuthResult => {
@@ -143,6 +148,8 @@ function AuthProvider({ children }: AuthProviderProps) {
     const signOut = async () => {
         try {
             await apiSignOut()
+            // Sign out of Firebase too (clears Google/OAuth session)
+            await firebaseSignOut(FirebaseAuth).catch(() => undefined)
         } finally {
             handleSignOut()
             navigate('/sign-in')
