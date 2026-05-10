@@ -4,6 +4,18 @@ import type { AxiosError, InternalAxiosRequestConfig } from 'axios'
 
 const unauthorizedCodes = [401, 419, 440]
 
+// Auth endpoints that should NEVER trigger a token refresh
+const AUTH_PATHS = [
+    '/auth/sign-in',
+    '/auth/sign-up',
+    '/auth/sign-out',
+    '/auth/refresh-token',
+    '/auth/forgot-password',
+    '/auth/verify-otp',
+    '/auth/reset-password',
+    '/auth/google',
+]
+
 let isRefreshing = false
 let failedQueue: Array<{
     resolve: (token: string) => void
@@ -21,6 +33,9 @@ const processQueue = (error: unknown, token: string | null = null) => {
     failedQueue = []
 }
 
+const isAuthEndpoint = (url?: string) =>
+    AUTH_PATHS.some((path) => url?.includes(path))
+
 const AxiosResponseIntrceptorErrorCallback = async (
     error: AxiosError,
 ): Promise<unknown> => {
@@ -30,10 +45,12 @@ const AxiosResponseIntrceptorErrorCallback = async (
     const { response } = error
     const { setToken } = useToken()
 
+    // Only attempt token refresh for protected endpoints, not auth endpoints
     if (
         response?.status === 401 &&
         originalRequest &&
-        !originalRequest._retry
+        !originalRequest._retry &&
+        !isAuthEndpoint(originalRequest.url)
     ) {
         if (isRefreshing) {
             return new Promise((resolve, reject) => {
@@ -48,7 +65,6 @@ const AxiosResponseIntrceptorErrorCallback = async (
         isRefreshing = true
 
         try {
-            // Correct endpoint: /api/auth/refresh-token
             const { data } = await AxiosBase.post('/auth/refresh-token')
             const newToken = data.token
 

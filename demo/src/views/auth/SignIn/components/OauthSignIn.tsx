@@ -23,8 +23,12 @@ const OauthSignIn = ({ setMessage, disableSubmit }: OauthSignInProps) => {
                         onSignIn({ accessToken: token }, user)
                         redirect()
                     }
-                } catch (error) {
-                    setMessage?.((error as string)?.toString() || '')
+                } catch (error: any) {
+                    const msg =
+                        error?.response?.data?.message ??
+                        error?.message ??
+                        'Google sign-in failed. Please try again.'
+                    setMessage?.(msg)
                 }
             })
         }
@@ -40,8 +44,12 @@ const OauthSignIn = ({ setMessage, disableSubmit }: OauthSignInProps) => {
                         onSignIn({ accessToken: token }, user)
                         redirect()
                     }
-                } catch (error) {
-                    setMessage?.((error as string)?.toString() || '')
+                } catch (error: any) {
+                    const msg =
+                        error?.response?.data?.message ??
+                        error?.message ??
+                        'GitHub sign-in failed. Please try again.'
+                    setMessage?.(msg)
                 }
             })
         }
