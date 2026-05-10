@@ -1,6 +1,7 @@
 import Logo from '@/components/template/Logo'
 import Alert from '@/components/ui/Alert'
 import SignInForm from './components/SignInForm'
+import OauthSignIn from './components/OauthSignIn'
 import ActionLink from '@/components/shared/ActionLink'
 import useTimeOutMessage from '@/utils/hooks/useTimeOutMessage'
 import { useThemeStore } from '@/store/themeStore'
@@ -56,6 +57,15 @@ export const SignInBase = ({
                     </div>
                 }
             />
+
+            <div className="mt-4">
+                <div className="flex items-center gap-2 my-4">
+                    <div className="flex-1 border-t border-gray-200 dark:border-gray-600" />
+                    <span className="text-sm text-gray-400">or continue with</span>
+                    <div className="flex-1 border-t border-gray-200 dark:border-gray-600" />
+                </div>
+                <OauthSignIn setMessage={setMessage} disableSubmit={disableSubmit} />
+            </div>
 
             <div>
                 <div className="mt-6 text-center">
