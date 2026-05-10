@@ -369,6 +369,11 @@ export async function changePassword(req: Request, res: Response) {
 
 export async function googleSignIn(req: Request, res: Response) {
   try {
+    // Guard: Firebase Admin must be initialised
+    if (!admin.apps.length) {
+      return res.status(503).json({ status: "failed", message: "Google sign-in is not configured on this server." });
+    }
+
     const { idToken } = req.body;
     if (!idToken) {
       return res.status(400).json({ status: "failed", message: "Firebase ID token required." });
