@@ -392,6 +392,9 @@ export async function googleSignIn(req: Request, res: Response) {
       return res.status(400).json({ status: "failed", message: "Google account has no email." });
     }
 
+    // Use || so empty-string name also falls back to email prefix
+    const userName = name || email.split("@")[0];
+
     // Find existing user or create one
     let user = await User.findOne({ $or: [{ googleId: uid }, { email }] });
 
@@ -399,16 +402,23 @@ export async function googleSignIn(req: Request, res: Response) {
       // New user — create with a random unusable password
       user = await User.create({
         email,
-        userName: name ?? email.split("@")[0],
+        userName,
         avatar: picture ?? null,
         googleId: uid,
+        role: "USER",
         password: randomBytes(32).toString("hex"),
       });
     } else {
-      // Link Google ID to existing account if not already linked
-      if (!user.googleId) user.googleId = uid;
-      if (picture && !user.avatar) user.avatar = picture;
-      await user.save();
+      // Use updateOne to avoid triggering full-document validators
+      // on pre-existing fields (e.g. stale lowercase role values)
+      const updates: Record<string, unknown> = {};
+      if (!user.googleId) updates.googleId = uid;
+      if (picture && !user.avatar) updates.avatar = picture;
+
+      if (Object.keys(updates).length > 0) {
+        await User.updateOne({ _id: user._id }, { $set: updates });
+        Object.assign(user, updates);
+      }
     }
 
     const accessToken = generateAccessToken({
