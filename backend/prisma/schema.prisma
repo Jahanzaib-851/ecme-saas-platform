@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+// --- Auth Models ---
+model User {
+  id             String         @id @default(uuid())
+  email          String         @unique
+  password       String
+  userName       String
+  avatar         String?
+  role           Role           @default(USER)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  refreshTokens  RefreshToken[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("refresh_tokens")
+}
+
+// --- Chat & Contact Models (For Frontend Integration) ---
+
+model Contact {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  avatar    String?
+  status    String   @default("offline") // online, offline, busy
+  chats     Chat[]
+
+  @@map("contacts")
+}
+
+model Chat {
+  id            String    @id @default(uuid())
+  lastMessage   String?
+  updatedAt     DateTime  @updatedAt
+  
+  // Relationship with Contact
+  contact       Contact   @relation(fields: [contactId], references: [id])
+  contactId     String
+  
+  // Messages in this chat
+  messages      Message[]
+
+  @@map("chats")
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  text      String   @db.Text
+  sender    String   // 'me' ya 'contact'
+  timestamp DateTime @default(now())
+  
+  // Relationship with Chat
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  chatId    String
+
+  @@map("messages")
+}
