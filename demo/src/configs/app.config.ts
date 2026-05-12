@@ -9,8 +9,8 @@ export type AppConfig = {
 }
 
 const appConfig: AppConfig = {
-    // Dev: '/api' (Vite proxy) | Prod: set VITE_API_URL=https://your-backend.railway.app/api
-    apiPrefix: (import.meta.env.VITE_API_URL as string) || '/api',
+    // Dev: '/api' (Vite proxy) | Prod: set VITE_API_BASE_URL=https://ecme-saas-platform.onrender.com/api
+    apiPrefix: (import.meta.env.VITE_API_BASE_URL as string) || '/api',
 
     // Dashboard ka asli path. 
     // AGAR REDIRECT NA HO, TOH ISAY '/home' KARKE DEKHEIN

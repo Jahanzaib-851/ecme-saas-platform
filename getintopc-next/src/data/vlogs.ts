@@ -1,0 +1,88 @@
+import { Vlog } from '@/types';
+
+export const vlogList: Vlog[] = [
+  {
+    slug: 'how-to-install-photoshop-2025',
+    title: 'How to Install Adobe Photoshop 2025 – Step by Step Guide',
+    description: 'Full step-by-step walkthrough installing and activating Adobe Photoshop 2025 on Windows 10/11.',
+    category: 'Installation Guide',
+    duration: '12:34',
+    date: 'May 10, 2025',
+    views: 142847,
+    thumbnail: 'https://picsum.photos/seed/vlog1/400/225',
+  },
+  {
+    slug: 'top-10-free-software-windows-11-2025',
+    title: 'Top 10 FREE Software for Windows 11 in 2025 You Must Have',
+    description: 'Essential free software every Windows 11 user needs — from productivity to security tools.',
+    category: 'Top Lists',
+    duration: '8:52',
+    date: 'May 8, 2025',
+    views: 98300,
+    thumbnail: 'https://picsum.photos/seed/vlog2/400/225',
+  },
+  {
+    slug: 'best-pc-settings-gaming-2025',
+    title: 'Best PC Settings for Gaming in 2025 – Boost FPS by 50%',
+    description: 'Optimize your Windows 11 PC for maximum gaming performance with these proven settings.',
+    category: 'Gaming Tips',
+    duration: '15:20',
+    date: 'May 6, 2025',
+    views: 215400,
+    thumbnail: 'https://picsum.photos/seed/vlog3/400/225',
+  },
+  {
+    slug: 'speed-up-windows-11',
+    title: 'How to Speed Up Windows 11 – Remove Bloatware in 2025',
+    description: 'Remove unnecessary apps and services to make Windows 11 run faster on any hardware.',
+    category: 'PC Optimization',
+    duration: '9:15',
+    date: 'May 4, 2025',
+    views: 178200,
+    thumbnail: 'https://picsum.photos/seed/vlog4/400/225',
+  },
+  {
+    slug: 'autocad-2025-installation-tutorial',
+    title: 'AutoCAD 2025 Installation & Activation – Complete Tutorial',
+    description: 'Full guide to download, install, and permanently activate AutoCAD 2025 on Windows.',
+    category: 'Installation Guide',
+    duration: '22:10',
+    date: 'May 2, 2025',
+    views: 64100,
+    thumbnail: 'https://picsum.photos/seed/vlog5/400/225',
+  },
+  {
+    slug: 'gta-6-pc-everything-we-know',
+    title: 'GTA 6 on PC – Everything We Know About Release & Specs',
+    description: 'Latest news, confirmed specs, and release date predictions for GTA 6 on PC.',
+    category: 'Gaming Tips',
+    duration: '19:55',
+    date: 'Apr 28, 2025',
+    views: 890200,
+    thumbnail: 'https://picsum.photos/seed/vlog7/400/225',
+  },
+  {
+    slug: 'best-free-video-editors-2025',
+    title: 'Best Free Video Editing Software 2025 – Top 5 Picks',
+    description: 'Honest comparison of the 5 best free video editors you can download right now.',
+    category: 'Software Reviews',
+    duration: '14:08',
+    date: 'Apr 24, 2025',
+    views: 126000,
+    thumbnail: 'https://picsum.photos/seed/vlog9/400/225',
+  },
+  {
+    slug: 'build-gaming-pc-2025',
+    title: 'Build Your First Gaming PC in 2025 – Complete Guide',
+    description: 'From parts to power-on: the complete beginner guide to building a gaming PC in 2025.',
+    category: 'How-To',
+    duration: '25:44',
+    date: 'Apr 20, 2025',
+    views: 445000,
+    thumbnail: 'https://picsum.photos/seed/vlog11/400/225',
+  },
+];
+
+export function getVlogBySlug(slug: string): Vlog | undefined {
+  return vlogList.find(v => v.slug === slug);
+}
